@@ -21,9 +21,7 @@ import pytest
 from registration import can_register, calculate_registration_fee
 
 
-# ============================================================
-# POSITIVE REGISTRATION TEST
-# ============================================================
+
 
 @pytest.mark.unit
 @pytest.mark.positive
@@ -38,9 +36,7 @@ def test_registration_allowed_for_typical_valid_student(
     assert can_register(**valid_registration_data) is True
 
 
-# ============================================================
-# NEGATIVE REGISTRATION TEST - PREREQUISITE
-# ============================================================
+
 
 @pytest.mark.unit
 @pytest.mark.negative
@@ -61,46 +57,34 @@ def test_registration_rejected_when_prerequisite_not_met(
     )
 
 
-# ============================================================
-# BOUNDARY VALUE TESTS FOR REGISTRATION
-# ============================================================
+
 
 @pytest.mark.unit
 @pytest.mark.boundary
 @pytest.mark.parametrize(
     "current_credits, course_credits, expected",
     [
-        # ----------------------------------------------------
-        # current_credits lower boundary: 0
-        # ----------------------------------------------------
-        (-1, 1, False),   # just below valid range
-        (0, 1, True),     # exact lower boundary
-        (1, 1, True),     # just above lower boundary
+      
+        (-1, 1, False),   
+        (0, 1, True),     
+        (1, 1, True),     
 
-        # ----------------------------------------------------
-        # current_credits upper boundary: 15
-        # ----------------------------------------------------
-        (14, 1, True),    # just below upper boundary
-        (15, 1, True),    # exact upper boundary
-        (16, 1, False),   # just above valid range
+  
+        (14, 1, True),    
+        (15, 1, True),    
+        (16, 1, False),   
 
-        # ----------------------------------------------------
-        # course_credits lower boundary: 1
-        # ----------------------------------------------------
+        
         (10, 0, False),   # below lower boundary
         (10, 1, True),    # exact lower boundary
         (10, 2, True),    # just above lower boundary
 
-        # ----------------------------------------------------
-        # course_credits upper boundary: 4
-        # ----------------------------------------------------
+       
         (10, 3, True),    # just below upper boundary
         (10, 4, True),    # exact upper boundary
         (10, 5, False),   # just above upper boundary
 
-        # ----------------------------------------------------
-        # resulting credit-load boundary: 18
-        # ----------------------------------------------------
+       
         (14, 3, True),    # resulting total = 17
         (14, 4, True),    # resulting total = 18
         (15, 4, False),   # resulting total = 19
@@ -121,9 +105,7 @@ def test_registration_boundary_values(
     )
 
 
-# ============================================================
-# NEGATIVE TEST FOR RESULTING CREDIT LOAD
-# ============================================================
+
 
 @pytest.mark.unit
 @pytest.mark.negative
@@ -135,10 +117,6 @@ def test_registration_rejected_when_total_credits_exceed_18():
     assert can_register(15, 4, True) is False
 
 
-# ============================================================
-# POSITIVE / BOUNDARY TESTS FOR REGISTRATION FEE
-# ============================================================
-
 @pytest.mark.unit
 @pytest.mark.positive
 @pytest.mark.boundary
@@ -148,7 +126,7 @@ def test_registration_rejected_when_total_credits_exceed_18():
         (0, 0.0),
         (1, 100.0),
 
-        # Below, at, and above the 12-credit transition
+        
         (11, 1100.0),
         (12, 1200.0),
         (13, 1275.0),
@@ -165,9 +143,7 @@ def test_registration_fee_for_valid_boundary_values(
     assert calculate_registration_fee(total_credits) == expected_fee
 
 
-# ============================================================
-# NEGATIVE FEE TESTS
-# ============================================================
+
 
 @pytest.mark.unit
 @pytest.mark.negative
@@ -175,8 +151,8 @@ def test_registration_fee_for_valid_boundary_values(
 @pytest.mark.parametrize(
     "total_credits",
     [
-        -1,     # just below valid range
-        19,     # just above valid range
+        -1,     
+        19,     
     ],
 )
 def test_registration_fee_rejects_invalid_credit_values(
@@ -186,9 +162,7 @@ def test_registration_fee_rejects_invalid_credit_values(
         calculate_registration_fee(total_credits)
 
 
-# ============================================================
-# YIELD-BASED FIXTURE TEST
-# ============================================================
+
 
 @pytest.mark.unit
 def test_temporary_resource_fixture_creates_test_file(
